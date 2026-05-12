@@ -1,32 +1,117 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>YukiBBS</title>
+const messages =
+  document.getElementById("messages");
 
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+const sendButton =
+  document.getElementById("send");
 
-<div id="header">
-  YukiBBS
-</div>
+const messageInput =
+  document.getElementById("message");
 
-<div id="messages"></div>
+const nameInput =
+  document.getElementById("name");
 
-<div id="input-area">
-  <input id="name" placeholder="name">
+const seedInput =
+  document.getElementById("seed");
 
-  <input id="seed" placeholder="seed">
+function makeHash(seed) {
+  return btoa(seed)
+    .replace(/[^a-zA-Z0-9]/g, "")
+    .slice(0, 7);
+}
 
-  <input id="message" placeholder="message">
+function addMessage(name, hash, body) {
 
-  <button id="send">
-    send
-  </button>
-</div>
+  const div =
+    document.createElement("div");
 
-<script src="app.js"></script>
+  div.classList.add("message");
 
-</body>
-</html>
+  if (body.startsWith("/")) {
+    div.classList.add("command");
+  }
+
+  div.innerHTML = `
+    <span class="name">
+      ${name}
+    </span>
+
+    <span class="hash">
+      @${hash}
+    </span>
+
+    :
+    ${body}
+  `;
+
+  messages.appendChild(div);
+
+  messages.scrollTop =
+    messages.scrollHeight;
+
+  handleCommand(body);
+}
+
+function addSystemMessage(text) {
+
+  const div =
+    document.createElement("div");
+
+  div.classList.add("system");
+
+  div.textContent =
+    "*** " + text;
+
+  messages.appendChild(div);
+
+  messages.scrollTop =
+    messages.scrollHeight;
+}
+
+function handleCommand(body) {
+
+  if (!body.startsWith("/")) {
+    return;
+  }
+
+  const parts =
+    body.slice(1).split(" ");
+
+  const cmd = parts[0];
+
+  if (cmd === "clear") {
+
+    addSystemMessage(
+      "room cleared"
+    );
+  }
+
+  if (cmd === "help") {
+
+    addSystemMessage(
+      "/help /clear"
+    );
+  }
+}
+
+sendButton.onclick = () => {
+
+  const name =
+    nameInput.value || "anon";
+
+  const seed =
+    seedInput.value || "default";
+
+  const body =
+    messageInput.value;
+
+  const hash =
+    makeHash(seed);
+
+  addMessage(
+    name,
+    hash,
+    body
+  );
+
+  messageInput.value = "";
+};
