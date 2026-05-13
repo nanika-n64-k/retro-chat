@@ -9,24 +9,38 @@ body {
 }
 
 #header {
-  font-size: 20px;
+  font-size: 22px;
+
   margin-bottom: 10px;
 }
 
-#messages {
+#input-area {
+  margin-bottom: 10px;
+}
+
+input {
+  margin-right: 5px;
+}
+
+table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+th, td {
+
   border: 1px solid #aaa;
 
-  height: 400px;
+  padding: 4px;
 
-  overflow-y: scroll;
+  text-align: left;
 
-  padding: 5px;
-
-  margin-bottom: 10px;
+  vertical-align: top;
 }
 
-.message {
-  margin-bottom: 8px;
+th {
+  background: #eee;
 }
 
 .hash {
