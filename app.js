@@ -17,6 +17,14 @@ const seedInput =
 
 let msgCount = 0;
 
+const adminHashes = [
+  "admin01"
+];
+
+const modHashes = [
+  "mod0001"
+];
+
 function makeHash(seed) {
 
   return btoa(seed)
@@ -24,33 +32,72 @@ function makeHash(seed) {
     .slice(0, 7);
 }
 
-function addMessage(name, hash, body) {
+function getHashClass(hash) {
+
+  if (
+    adminHashes.includes(hash)
+  ) {
+    return "admin-hash";
+  }
+
+  if (
+    modHashes.includes(hash)
+  ) {
+    return "mod-hash";
+  }
+
+  return "";
+}
+
+function addMessage(
+  name,
+  seed,
+  hash,
+  body
+) {
 
   msgCount++;
 
   const tr =
     document.createElement("tr");
 
-  let contentClass = "";
+  let messageClass = "";
 
-  if (body.startsWith("/")) {
-    contentClass = "command";
+  if (
+    body.startsWith("/")
+  ) {
+    messageClass = "command";
   }
+
+  const hashClass =
+    getHashClass(hash);
 
   tr.innerHTML = `
 
-    <td>
+    <td class="col-no">
       ${msgCount}
     </td>
 
-    <td>
-      ${name}
-      <span class="hash">
+    <td class="col-user">
+
+      <div class="user-name">
+        ${name}
+      </div>
+
+      <div class="seed">
+        seed: ${seed}
+      </div>
+
+      <div class="hash ${hashClass}">
         @${hash}
-      </span>
+      </div>
+
     </td>
 
-    <td class="${contentClass}">
+    <td class="
+      col-message
+      ${messageClass}
+    ">
       ${body}
     </td>
   `;
@@ -69,11 +116,11 @@ function addSystemMessage(text) {
 
   tr.innerHTML = `
 
-    <td>
+    <td class="col-no">
       ${msgCount}
     </td>
 
-    <td>
+    <td class="col-user">
       SYSTEM
     </td>
 
@@ -87,7 +134,9 @@ function addSystemMessage(text) {
 
 function handleCommand(body) {
 
-  if (!body.startsWith("/")) {
+  if (
+    !body.startsWith("/")
+  ) {
     return;
   }
 
@@ -122,7 +171,9 @@ sendButton.onclick = () => {
   const body =
     messageInput.value;
 
-  if (body.trim() === "") {
+  if (
+    body.trim() === ""
+  ) {
     return;
   }
 
@@ -131,6 +182,7 @@ sendButton.onclick = () => {
 
   addMessage(
     name,
+    seed,
     hash,
     body
   );
