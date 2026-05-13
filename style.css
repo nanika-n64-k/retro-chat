@@ -1,1 +1,43 @@
+body {
+  background: white;
+  color: black;
 
+  font-size: 14px;
+  font-family: sans-serif;
+
+  margin: 10px;
+}
+
+#header {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+#messages {
+  border: 1px solid #aaa;
+
+  height: 400px;
+
+  overflow-y: scroll;
+
+  padding: 5px;
+
+  margin-bottom: 10px;
+}
+
+.message {
+  margin-bottom: 8px;
+}
+
+.hash {
+  color: #888;
+}
+
+.command {
+  color: #299;
+}
+
+.system {
+  color: #777;
+  font-style: italic;
+}
