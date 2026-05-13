@@ -1,5 +1,7 @@
-const messages =
-  document.getElementById("messages");
+const bodyElement =
+  document.getElementById(
+    "messages-body"
+  );
 
 const sendButton =
   document.getElementById("send");
@@ -13,7 +15,10 @@ const nameInput =
 const seedInput =
   document.getElementById("seed");
 
+let msgCount = 0;
+
 function makeHash(seed) {
+
   return btoa(seed)
     .replace(/[^a-zA-Z0-9]/g, "")
     .slice(0, 7);
@@ -21,50 +26,63 @@ function makeHash(seed) {
 
 function addMessage(name, hash, body) {
 
-  const div =
-    document.createElement("div");
+  msgCount++;
 
-  div.classList.add("message");
+  const tr =
+    document.createElement("tr");
+
+  let contentClass = "";
 
   if (body.startsWith("/")) {
-    div.classList.add("command");
+    contentClass = "command";
   }
 
-  div.innerHTML = `
-    <span class="name">
+  tr.innerHTML = `
+
+    <td>
+      ${msgCount}
+    </td>
+
+    <td>
       ${name}
-    </span>
+      <span class="hash">
+        @${hash}
+      </span>
+    </td>
 
-    <span class="hash">
-      @${hash}
-    </span>
-
-    :
-    ${body}
+    <td class="${contentClass}">
+      ${body}
+    </td>
   `;
 
-  messages.appendChild(div);
-
-  messages.scrollTop =
-    messages.scrollHeight;
+  bodyElement.prepend(tr);
 
   handleCommand(body);
 }
 
 function addSystemMessage(text) {
 
-  const div =
-    document.createElement("div");
+  msgCount++;
 
-  div.classList.add("system");
+  const tr =
+    document.createElement("tr");
 
-  div.textContent =
-    "*** " + text;
+  tr.innerHTML = `
 
-  messages.appendChild(div);
+    <td>
+      ${msgCount}
+    </td>
 
-  messages.scrollTop =
-    messages.scrollHeight;
+    <td>
+      SYSTEM
+    </td>
+
+    <td class="system">
+      *** ${text}
+    </td>
+  `;
+
+  bodyElement.prepend(tr);
 }
 
 function handleCommand(body) {
@@ -78,17 +96,17 @@ function handleCommand(body) {
 
   const cmd = parts[0];
 
-  if (cmd === "clear") {
-
-    addSystemMessage(
-      "room cleared"
-    );
-  }
-
   if (cmd === "help") {
 
     addSystemMessage(
       "/help /clear"
+    );
+  }
+
+  if (cmd === "clear") {
+
+    addSystemMessage(
+      "room cleared"
     );
   }
 }
@@ -103,6 +121,10 @@ sendButton.onclick = () => {
 
   const body =
     messageInput.value;
+
+  if (body.trim() === "") {
+    return;
+  }
 
   const hash =
     makeHash(seed);
