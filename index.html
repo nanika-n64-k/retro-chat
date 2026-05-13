@@ -9,16 +9,25 @@
 <body>
 
 <div id="header">
-  YukiBBSを目指して作成中
+  YukiBBS
 </div>
 
 <div id="input-area">
 
-  <input id="name" placeholder="name">
+  <label>
+    Name
+    <input id="name" placeholder="name">
+  </label>
 
-  <input id="seed" placeholder="seed">
+  <label>
+    Seed
+    <input id="seed" placeholder="seed">
+  </label>
 
-  <input id="message" placeholder="message">
+  <label>
+    Message
+    <input id="message" placeholder="message">
+  </label>
 
   <button id="send">
     send
@@ -30,9 +39,15 @@
 
   <thead>
     <tr>
-      <th>No</th>
-      <th>User</th>
-      <th>Message</th>
+      <th class="col-no">No</th>
+
+      <th class="col-user">
+        Username
+      </th>
+
+      <th class="col-message">
+        Comment
+      </th>
     </tr>
   </thead>
 
